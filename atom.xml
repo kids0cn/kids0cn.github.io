@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://kids0cn.github.io</id>
     <title>老农的自留地</title>
-    <updated>2020-08-07T12:17:50.455Z</updated>
+    <updated>2020-08-07T12:18:40.282Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://kids0cn.github.io"/>
     <link rel="self" href="https://kids0cn.github.io/atom.xml"/>
@@ -66,7 +66,8 @@ sudo apt-get install libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev
 <p><strong>4.编译准备</strong></p>
 <pre><code class="language-text">cd librealsense
 mkdir build &amp;&amp; cd build
-cmake ../ -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=true \ -DFORCE_RSUSB_BACKEND=ON -DBUILD_WITH_TM2=false -DIMPORT_DEPTH_CAM_FW=false
+cmake ../ -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=true \
+-DFORCE_RSUSB_BACKEND=ON -DBUILD_WITH_TM2=false -DIMPORT_DEPTH_CAM_FW=false
 </code></pre>
 <p><strong>-DFORCE_RSUSB_BACKEND=ON 必选，强制LIBUVC后端，否则你要自己给内核打补丁。</strong><br>
 <strong>5.编译</strong></p>

@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://kids0cn.github.io/favicon.ico?v=1596802664971">
+<link rel="shortcut icon" href="https://kids0cn.github.io/favicon.ico?v=1596802715394">
 <link rel="stylesheet" href="https://kids0cn.github.io/styles/main.css">
 
 
@@ -34,7 +34,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://kids0cn.github.io">
-        <img src="https://kids0cn.github.io/images/avatar.png?v=1596802664971" class="site-logo">
+        <img src="https://kids0cn.github.io/images/avatar.png?v=1596802715394" class="site-logo">
         <h1 class="site-title">老农的自留地</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -153,7 +153,8 @@ sudo apt-get install libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev
 <p><strong>4.编译准备</strong></p>
 <pre><code class="language-text">cd librealsense
 mkdir build &amp;&amp; cd build
-cmake ../ -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=true \ -DFORCE_RSUSB_BACKEND=ON -DBUILD_WITH_TM2=false -DIMPORT_DEPTH_CAM_FW=false
+cmake ../ -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=true \
+-DFORCE_RSUSB_BACKEND=ON -DBUILD_WITH_TM2=false -DIMPORT_DEPTH_CAM_FW=false
 </code></pre>
 <p><strong>-DFORCE_RSUSB_BACKEND=ON 必选，强制LIBUVC后端，否则你要自己给内核打补丁。</strong><br>
 <strong>5.编译</strong></p>
