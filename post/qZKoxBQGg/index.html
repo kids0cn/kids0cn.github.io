@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>【20-8-7】树莓派上部署英特尔深度相机IntelRealsense T265 | 老农的自留地</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://kids0cn.github.io/favicon.ico?v=1596802403532">
+<link rel="stylesheet" href="https://kids0cn.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="最近在搭建无人机的自主飞行平台，无GPS的情况下室内定位的方案除了光流，最好的就是配合intel的realsense系列的摄像头。尤其是T265本身带IMU，可以直接给飞控输出位姿信息，不管是APM固件还是PX4固件，在ROS和MAVROS..." />
+    <meta name="keywords" content="SLAM,无人机,ROS,开发板,Robot" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://kids0cn.github.io">
+        <img src="https://kids0cn.github.io/images/avatar.png?v=1596802403532" class="site-logo">
+        <h1 class="site-title">老农的自留地</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      精耕细作
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">心</a> | <a class="rss" href="https://kids0cn.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">【20-8-7】树莓派上部署英特尔深度相机IntelRealsense T265</h2>
+            <div class="post-date">2020-08-07</div>
+            
+              <div class="feature-container" style="background-image: url('https://kids0cn.github.io/post-images/qZKoxBQGg.jpg')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <p>最近在搭建无人机的自主飞行平台，无GPS的情况下室内定位的方案除了光流，最好的就是配合intel的realsense系列的摄像头。尤其是T265本身带IMU，可以直接给飞控输出位姿信息，不管是APM固件还是PX4固件，在ROS和MAVROS的帮助下，都可以直接获取T265的信息。<br>
+自主飞行平台的板载电脑是树莓派3b+，运行ubuntu mate 18.04的系统和ROS Melodic，理论上可以随时更换为性能更强劲的英伟达Jetson系列系统，或者intel upboard系列。<br>
+ROS的安装，在其他的文章中已经讲过了。本文只涉及部署Intel的T265相机。分为两个部分，SDK的安装和ROS节点的安装。前提是ROS系统已经被部署在树莓派上。</p>
+<h2 id="0-预操作扩大swap分区">0. 预操作：扩大Swap分区</h2>
+<p>Ubuntu mate默认的Swap分区太小，编译时会直接卡死，并且不会报错，所以首先要扩大swap分区。另外，编译操作会让树莓派温度升高的很厉害，需要安装好散热风扇。<br>
+查看当前的交换空间大小，我的默认是100M</p>
+<pre><code class="language-shell">free -m 
+</code></pre>
+<p><strong>1.建立交换空间文件</strong><br>
+随便在哪里都行，放到碰不到的地方，防治误删除</p>
+<pre><code class="language-shell">cd /opt/
+sudo mkdir swap_temp #名字任意起
+cd swap_temp
+sudo touch swap
+
+</code></pre>
+<p><strong>2.设置交换文件的大小</strong></p>
+<pre><code class="language-shell">sudo dd if=/dev/zero of=/opt/swap_temp/swap bs=1024 count=3048000  # 我这里设置的是3G
+</code></pre>
+<p>等一会儿，结束时才会有回显，我的写入速度是20M每秒，3G需要2分钟左右<br>
+结束后返回：</p>
+<pre><code>3048000+0 records in
+3048000+0 records out
+2097152000 bytes (2.9 GB, 3.0 GiB) copied, 242.095 s, 18.7 MB/s
+</code></pre>
+<p><strong>3.设置为交换空间</strong></p>
+<pre><code class="language-shell">sudo mkswap /opt/swap_temp/swap
+</code></pre>
+<p><strong>4.启用交换空间</strong></p>
+<pre><code class="language-shell">sudo swapon /opt/swap_temp/sawp
+</code></pre>
+<p>现在已经可以使用了，通过free -m查看</p>
+<p><strong>5.写入分区</strong></p>
+<pre><code class="language-shell">sudo vim /etc/fstab
+文件最后加入
+/opt/swap_temp/sawp /swap swap defaults 0 0
+</code></pre>
+<h2 id="1intel-realsense-sdk的安装">1.Intel Realsense SDK的安装</h2>
+<p><strong>1.安装依赖包</strong></p>
+<pre><code class="language-text">sudo apt-get update &amp;&amp; sudo apt-get upgrade &amp;&amp; sudo apt-get dist-upgrade
+sudo apt-get install git cmake libssl-dev libusb-1.0-0-dev pkg-config libgtk-3-dev
+sudo apt-get install libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev
+</code></pre>
+<p>第二行的是核心依赖，必装。第三行是3D相关的依赖，如果不打算使用realsense-viewer，可以不装，树莓派性能有限，安装SDK的目的是为了安装好驱动，不需要执行太多本机操作，建议内存卡小的不用装了。</p>
+<p><strong>3.下载Realsense SDK</strong></p>
+<pre><code class="language-text">git clone https://github.com/IntelRealSense/librealsense.git
+</code></pre>
+<p><strong>4.编译准备</strong></p>
+<pre><code class="language-text">mkdir build &amp;&amp; cd build
+cmake ../ -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=true -DFORCE_RSUSB_BACKEND=ON -DBUILD_WITH_TM2=false -DIMPORT_DEPTH_CAM_FW=false
+</code></pre>
+<p><strong>-DFORCE_RSUSB_BACKEND=ON 必选，强制LIBUVC后端，否则你要自己给内核打补丁。</strong><br>
+<strong>5.编译</strong></p>
+<pre><code class="language-text">sudo make uninstall &amp;&amp; make clean &amp;&amp; make &amp;&amp; sudo make install
+</code></pre>
+<p>我自己的3B+需要编译三小时左右。</p>
+<p><strong>6.设置udev规则</strong></p>
+<pre><code class="language-text">sudo ./scripts/setup_udev_rules.sh
+</code></pre>
+<p>主要是为了识别设备，最重要的也就是这里<br>
+<strong>7.测试</strong></p>
+<pre><code class="language-text">realsense-viewer
+</code></pre>
+<p>我的机载电脑没有开图形界面，一般都是VNC连接上去。</p>
+<h2 id="2-编译ros驱动">2. 编译ROS驱动</h2>
+<p>目的是为了让ROS节点可以订阅T265发回的IMU信息。</p>
+<p>TODO</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://kids0cn.github.io/tag/VyftBMkNn/" class="tag">
+                    SLAM
+                  </a>
+                
+                  <a href="https://kids0cn.github.io/tag/C_j0kTYD16/" class="tag">
+                    无人机
+                  </a>
+                
+                  <a href="https://kids0cn.github.io/tag/SRJIwj_lQ7/" class="tag">
+                    ROS
+                  </a>
+                
+                  <a href="https://kids0cn.github.io/tag/XLEzHCr4LE/" class="tag">
+                    开发板
+                  </a>
+                
+                  <a href="https://kids0cn.github.io/tag/letIOJ6hIU/" class="tag">
+                    Robot
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://kids0cn.github.io/post/sfK70jTHc/">
+                  <h3 class="post-title">
+                    玩转VIM
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '11076abfacddf9b0bd8a',
+        clientSecret: 'cf5e6000930d960e01f7cabe95886fa6101955de',
+        repo: 'kids0cn.github.io',
+        owner: 'kids0cn',
+        admin: ['kids0cn'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
