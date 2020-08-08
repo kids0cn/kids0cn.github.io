@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://kids0cn.github.io</id>
     <title>kids&apos;s Blogger</title>
-    <updated>2020-08-08T03:04:10.590Z</updated>
+    <updated>2020-08-08T11:33:26.739Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://kids0cn.github.io"/>
     <link rel="self" href="https://kids0cn.github.io/atom.xml"/>
@@ -10,6 +10,84 @@
     <logo>https://kids0cn.github.io/images/avatar.png</logo>
     <icon>https://kids0cn.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, kids&apos;s Blogger</rights>
+    <entry>
+        <title type="html"><![CDATA[【2020-8-8】树莓派+Ubuntu18.04编译Dji Guidance ROS]]></title>
+        <id>https://kids0cn.github.io/post/TGQMWjI7t/</id>
+        <link href="https://kids0cn.github.io/post/TGQMWjI7t/">
+        </link>
+        <updated>2020-08-08T11:16:06.000Z</updated>
+        <content type="html"><![CDATA[<p>实验室还有一批大疆的M100和配套的Guidance，但是一直没有玩起来，大疆官方也早就抛弃了这个平台，不再提供技术支持。<br>
+今天在树莓派上编译Intel Realsense的固件的时候，看到大疆之前还提供了适用于16.04的guidance_ros的包，就试着编译了一下。结果正常，只需要修改一些地方。明天用到机器上试试。<br>
+由于dji在16年发布，17年基本上就被大疆抛弃了，所以只能识别出openc2。所以修改掉源文件的CMakelist。</p>
+<pre><code class="language-c">cmake_minimum_required(VERSION 2.8.3)
+project(guidance)
+
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  cv_bridge
+  std_msgs
+  sensor_msgs
+  geometry_msgs
+)
+#####
+find_package(OpenCV 2 REQUIRED core highgui)
+#####
+catkin_package(
+)
+
+include_directories(
+  ${OpenCV_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}
+  include
+)
+
+message(&quot;System is: &quot; ${CMAKE_SYSTEM_PROCESSOR})
+if (${CMAKE_SYSTEM_NAME} MATCHES &quot;Linux&quot;)
+  if (CMAKE_SIZEOF_VOID_P EQUAL 4)
+    message(&quot;-- 32bit detected&quot;)
+    link_directories(lib/x86)
+  elseif (CMAKE_SIZEOF_VOID_P EQUAL 8)
+    message(&quot;-- 64bit detected&quot;)
+    link_directories(lib/x64)
+  endif ()
+else()
+  message(&quot;-- Non-linux platform detected but sorry we do not support :D&quot;)
+endif ()
+
+if (${CMAKE_SYSTEM_PROCESSOR} MATCHES &quot;armv7l&quot; )
+  message(&quot;-- &quot; ${CMAKE_SYSTEM_PROCESSOR} &quot; detected&quot;)
+  link_directories(lib/XU3)
+else ()
+endif ()
+
+##cyril add the following
+message(STATUS &quot;OpenCV library status:&quot;)
+message(STATUS &quot;    version: ${OpenCV_VERSION}&quot;)
+message(STATUS &quot;    libraries: ${OpenCV_LIBS}&quot;)
+message(STATUS &quot;    include path: ${OpenCV_INCLUDE_DIRS}&quot;)
+
+link_libraries(
+  ${OpenCV_LIBS}
+  ${catkin_LIBRARIES}
+  DJI_guidance
+
+  usb-1.0
+  yaml-cpp)
+
+add_executable(guidanceNode
+  src/GuidanceNode.cpp
+  src/DJI_utility.cpp)
+
+add_executable(guidanceNodeTest
+  src/GuidanceNodeTest.cpp)
+
+add_executable(guidanceNodeCalibration
+  src/GuidanceNodeCalibration.cpp
+  src/DJI_utility.cpp)
+</code></pre>
+<p>修改标注出来的地方，去掉2就行。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[【20-8-7】树莓派上部署英特尔深度相机IntelRealsense T265]]></title>
         <id>https://kids0cn.github.io/post/qZKoxBQGg/</id>
