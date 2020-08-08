@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://kids0cn.github.io</id>
     <title>kids&apos;s Blogger</title>
-    <updated>2020-08-07T12:23:09.099Z</updated>
+    <updated>2020-08-08T03:04:10.590Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://kids0cn.github.io"/>
     <link rel="self" href="https://kids0cn.github.io/atom.xml"/>
@@ -55,28 +55,28 @@ sudo touch swap
 </code></pre>
 <h2 id="1intel-realsense-sdk的安装">1.Intel Realsense SDK的安装</h2>
 <p><strong>1.安装依赖包</strong></p>
-<pre><code class="language-text">sudo apt-get update &amp;&amp; sudo apt-get upgrade &amp;&amp; sudo apt-get dist-upgrade
+<pre><code class="language-shell">sudo apt-get update &amp;&amp; sudo apt-get upgrade &amp;&amp; sudo apt-get dist-upgrade
 sudo apt-get install git cmake libssl-dev libusb-1.0-0-dev pkg-config libgtk-3-dev
 sudo apt-get install libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev
 </code></pre>
 <p>第二行的是核心依赖，必装。第三行是3D相关的依赖，如果不打算使用realsense-viewer，可以不装，树莓派性能有限，安装SDK的目的是为了安装好驱动，不需要执行太多本机操作，建议内存卡小的不用装了。</p>
 <p><strong>3.下载Realsense SDK</strong></p>
-<pre><code class="language-text">git clone https://github.com/IntelRealSense/librealsense.git
+<pre><code class="language-shell">git clone https://github.com/IntelRealSense/librealsense.git
 </code></pre>
 <p><strong>4.编译准备</strong></p>
-<pre><code class="language-text">cd librealsense
+<pre><code class="language-shell">cd librealsense
 mkdir build &amp;&amp; cd build
 cmake ../ -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=true \
 -DFORCE_RSUSB_BACKEND=ON -DBUILD_WITH_TM2=false -DIMPORT_DEPTH_CAM_FW=false
 </code></pre>
 <p><strong>-DFORCE_RSUSB_BACKEND=ON 必选，强制LIBUVC后端，否则你要自己给内核打补丁。</strong><br>
 <strong>5.编译</strong></p>
-<pre><code class="language-text">sudo make uninstall &amp;&amp; make clean &amp;&amp; make &amp;&amp; sudo make install
+<pre><code class="language-shell">sudo make uninstall &amp;&amp; make clean &amp;&amp; make -j2 &amp;&amp; sudo make install -2
 </code></pre>
 <p><img src="https://kids0cn.github.io/post-images/1596802908724.png" alt="" loading="lazy"><br>
-我自己的3B+需要编译三小时左右。</p>
+我自己的3B+需要编译三小时左右。中间交换空间最大占用为1.6G。</p>
 <p><strong>6.设置udev规则</strong></p>
-<pre><code class="language-text">sudo ./scripts/setup_udev_rules.sh
+<pre><code class="language-shell">sudo ./scripts/setup_udev_rules.sh
 </code></pre>
 <p>主要是为了识别设备，最重要的也就是这里<br>
 <strong>7.测试</strong></p>
@@ -84,8 +84,46 @@ cmake ../ -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=true \
 </code></pre>
 <p>我的机载电脑没有开图形界面，一般都是VNC连接上去。</p>
 <h2 id="2-编译ros驱动">2. 编译ROS驱动</h2>
-<p>目的是为了让ROS节点可以订阅T265发回的IMU信息。</p>
-<p>TODO</p>
+<p>目的是为了让ROS节点可以订阅T265发回的IMU信息。<br>
+英特尔官方发布了两种安装方式，1是通过apt的方式安装二进制文件，2是通过源码编译。但是前提是系统里已经安装好了对应的ROS系统，我的是18.04+Melodic</p>
+<h3 id="21-apt-get-安装">2.1 APT-Get 安装</h3>
+<pre><code class="language-shell">export ROS_VER=melodic
+</code></pre>
+<p>安装</p>
+<pre><code class="language-shell">sudo apt-get install ros-$ROS_VER-realsense2-camera
+</code></pre>
+<p>用于3D显示的库</p>
+<pre><code>sudo apt-get install ros-$ROS_VER-realsense2-description
+</code></pre>
+<p>注意：</p>
+<ul>
+<li>这种方法安装的librealsense2总是落后于最新发布的版本</li>
+</ul>
+<h3 id="22-源码编译">2.2 源码编译</h3>
+<h5 id="1创建工作目录">1.创建工作目录</h5>
+<p>工作目录的名字不一定要是catkin_ws</p>
+<pre><code class="language-shell">mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/src/
+</code></pre>
+<h5 id="2克隆源码">2.克隆源码</h5>
+<pre><code class="language-shell">git clone https://github.com/IntelRealSense/realsense-ros.git
+cd realsense-ros/
+git checkout `git tag | sort -V | grep -P &quot;^\d+\.\d+\.\d+&quot; | tail -1`
+cd ..
+</code></pre>
+<h5 id="3编译">3.编译</h5>
+<pre><code class="language-shell">catkin_init_workspace
+cd ..
+catkin_make clean
+catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release
+catkin_make install
+echo &quot;source ~/catkin_ws/devel/setup.bash&quot; &gt;&gt; ~/.bashrc
+source ~/.bashrc
+</code></pre>
+<h3 id="3使用">3.使用</h3>
+<p>启动节点</p>
+<pre><code class="language-shell">roslaunch realsense2_camera rs_camera.launch
+</code></pre>
 ]]></content>
     </entry>
     <entry>
