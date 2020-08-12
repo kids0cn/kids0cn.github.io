@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://kids0cn.github.io/favicon.ico?v=1597218268527">
+<link rel="shortcut icon" href="https://kids0cn.github.io/favicon.ico?v=1597218384558">
 <link rel="stylesheet" href="https://kids0cn.github.io/styles/main.css">
 
 
@@ -27,7 +27,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://kids0cn.github.io">
-        <img src="https://kids0cn.github.io/images/avatar.png?v=1597218268527" class="site-logo">
+        <img src="https://kids0cn.github.io/images/avatar.png?v=1597218384558" class="site-logo">
         <h1 class="site-title">kids&#39;s Blogger</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -115,7 +115,7 @@ VIO采用视觉里程计(Visual Odometry)，通过相机的图像以及结合设
 本文介绍PX4以及机载电脑如何设置VIO。本文介绍的方法是通过ROS将VIO的信息传输给PX4，PX4本身不在乎接收到的里程信息是从何处传来的。</p>
 <h2 id="2安装中介包">2.安装中介包</h2>
 <p>T265本身带IMU，可以实时获取机身在三维空间的坐标已经高度和速度信息，将它获取的数据发布给px4的飞行控制器，飞控可以根据这些信息进入position模式（定点）。<br>
-中介包有两个</p>
+中介包有两个，安装自己需要的就行</p>
 <ul>
 <li>PX4官方写的VIO：https://github.com/Auterion/VIO</li>
 <li>APM写的t265_to_mavros：https://github.com/thien94/vision_to_mavros</li>
