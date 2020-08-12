@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>关于 | kids&#39;s Blogger</title>
+<title>【8-12】树莓派ubuntu升级Cmake | kids&#39;s Blogger</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,15 +24,10 @@
 
 
 
-    <meta name="description" content="
-欢迎来到我的小站呀，很高兴遇见你！🤝
-
-🏠 关于本站
-👨‍💻 博主是谁
-⛹ 兴趣爱好
-📬 联系我呀
-..." />
-    <meta name="keywords" content="" />
+    <meta name="description" content="树莓派上运行的是Ubuntu Mate18.04的系统，自带的cmake版本是3.10.0，编译软件的时候要求cmake版本大于3.11.0。需要进行升级。
+注意网上的教程会让你卸载现在系统里cmake，就是执行如下的指令：
+sudo ap..." />
+    <meta name="keywords" content="Fixed,Linux" />
   </head>
   <body>
     <div id="app" class="main">
@@ -103,20 +98,58 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">关于</h2>
-            <div class="post-date">2019-01-25</div>
+            <h2 class="post-title">【8-12】树莓派ubuntu升级Cmake</h2>
+            <div class="post-date">2020-08-12</div>
             
             <div class="post-content" v-pre>
-              <blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
-</blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<h2 id="兴趣爱好">⛹ 兴趣爱好</h2>
-<h2 id="联系我呀">📬 联系我呀</h2>
+              <p>树莓派上运行的是Ubuntu Mate18.04的系统，自带的cmake版本是3.10.0，编译软件的时候要求cmake版本大于3.11.0。需要进行升级。<br>
+<strong>注意</strong>网上的教程会让你卸载现在系统里cmake，就是执行如下的指令：</p>
+<pre><code class="language-shell">sudo apt-get autoremove cmake
+</code></pre>
+<p><strong>千万不要这样操作</strong>，这样操作会顺便把所有cmake编译的程序都卸载掉，比如你的电脑里装好了ros系统，那么就全被干掉了。<br>
+<strong>Cmake可以直接用新版本覆盖老版本，不需要卸载旧版本</strong></p>
+<p>去Cmake的官网找到需要下载的版本：http://www.cmake.org/files/</p>
+<pre><code class="language-shell">getconf LONG_BIT
+</code></pre>
+<p>检查下系统版本，32就是32位，64为64位<br>
+我这里下载的是cmake 3.17.4</p>
+<pre><code class="language-shell">wget https://cmake.org/files/v3.17/cmake-3.17.4.tar.gz
+tar -zxvf cmake-3.17.4.tar.gz
+</code></pre>
+<p>进入解压的目录安装</p>
+<pre><code class="language-shell">cd cmake-3.17.4
+./configure
+make
+sudo make install
+</code></pre>
+<p>等待一段时间</p>
+<p>检查版本</p>
+<pre><code class="language-shell">cmake -version
+</code></pre>
 
             </div>
             
+              <div class="tag-container">
+                
+                  <a href="https://kids0cn.github.io/tag/ytipT5P9h/" class="tag">
+                    Fixed
+                  </a>
+                
+                  <a href="https://kids0cn.github.io/tag/flgGOwNfff/" class="tag">
+                    Linux
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://kids0cn.github.io/post/XdBkG1tky/">
+                  <h3 class="post-title">
+                    【8-11】树莓派上部署英特尔神经网络计算棒Intel NCS2
+                  </h3>
+                </a>
+              </div>
             
 
             

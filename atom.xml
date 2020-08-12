@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://kids0cn.github.io</id>
     <title>kids&apos;s Blogger</title>
-    <updated>2020-08-12T01:55:06.182Z</updated>
+    <updated>2020-08-12T06:18:44.637Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://kids0cn.github.io"/>
     <link rel="self" href="https://kids0cn.github.io/atom.xml"/>
@@ -10,6 +10,38 @@
     <logo>https://kids0cn.github.io/images/avatar.png</logo>
     <icon>https://kids0cn.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, kids&apos;s Blogger</rights>
+    <entry>
+        <title type="html"><![CDATA[【8-12】树莓派ubuntu升级Cmake]]></title>
+        <id>https://kids0cn.github.io/post/8Hwn5sX2W/</id>
+        <link href="https://kids0cn.github.io/post/8Hwn5sX2W/">
+        </link>
+        <updated>2020-08-12T06:03:02.000Z</updated>
+        <content type="html"><![CDATA[<p>树莓派上运行的是Ubuntu Mate18.04的系统，自带的cmake版本是3.10.0，编译软件的时候要求cmake版本大于3.11.0。需要进行升级。<br>
+<strong>注意</strong>网上的教程会让你卸载现在系统里cmake，就是执行如下的指令：</p>
+<pre><code class="language-shell">sudo apt-get autoremove cmake
+</code></pre>
+<p><strong>千万不要这样操作</strong>，这样操作会顺便把所有cmake编译的程序都卸载掉，比如你的电脑里装好了ros系统，那么就全被干掉了。<br>
+<strong>Cmake可以直接用新版本覆盖老版本，不需要卸载旧版本</strong></p>
+<p>去Cmake的官网找到需要下载的版本：http://www.cmake.org/files/</p>
+<pre><code class="language-shell">getconf LONG_BIT
+</code></pre>
+<p>检查下系统版本，32就是32位，64为64位<br>
+我这里下载的是cmake 3.17.4</p>
+<pre><code class="language-shell">wget https://cmake.org/files/v3.17/cmake-3.17.4.tar.gz
+tar -zxvf cmake-3.17.4.tar.gz
+</code></pre>
+<p>进入解压的目录安装</p>
+<pre><code class="language-shell">cd cmake-3.17.4
+./configure
+make
+sudo make install
+</code></pre>
+<p>等待一段时间</p>
+<p>检查版本</p>
+<pre><code class="language-shell">cmake -version
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[【8-11】树莓派上部署英特尔神经网络计算棒Intel NCS2]]></title>
         <id>https://kids0cn.github.io/post/XdBkG1tky/</id>
