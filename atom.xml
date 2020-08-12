@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://kids0cn.github.io</id>
     <title>kids&apos;s Blogger</title>
-    <updated>2020-08-10T08:22:14.475Z</updated>
+    <updated>2020-08-12T01:55:06.182Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://kids0cn.github.io"/>
     <link rel="self" href="https://kids0cn.github.io/atom.xml"/>
@@ -10,6 +10,64 @@
     <logo>https://kids0cn.github.io/images/avatar.png</logo>
     <icon>https://kids0cn.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, kids&apos;s Blogger</rights>
+    <entry>
+        <title type="html"><![CDATA[【8-11】树莓派上部署英特尔神经网络计算棒Intel NCS2]]></title>
+        <id>https://kids0cn.github.io/post/XdBkG1tky/</id>
+        <link href="https://kids0cn.github.io/post/XdBkG1tky/">
+        </link>
+        <updated>2020-08-11T12:05:08.000Z</updated>
+        <content type="html"><![CDATA[<p>如果需要在树莓派上进行神经网络和计算机视觉的操作，仅仅依靠树莓派的性能，是远远不够的。而英特尔神经计算棒就可以用来进行CV的计算，从而在树莓派上部署人脸识别，手势识别之类的CV算法。<br>
+<strong>注意：</strong></p>
+<ul>
+<li>树莓派必须使用树莓派官方系统Raspian。</li>
+<li>树莓派上部署的工具包，仅能用来进行计算推理，其余功能需要用笔记本或者台式计算机。</li>
+<li>官网的安装目录为 /opt/intel/openvino，也有博客建议安装到自己的本地目录，这里安装在~/intel/openvino</li>
+</ul>
+<h1 id="1驱动安装">1.驱动安装</h1>
+<h2 id="1下载安装包">1.下载安装包</h2>
+<pre><code class="language-shell">sudo mkdir -p ~/intel/openvino #建立一个文件夹
+wget https://download.01.org/opencv/2020/openvinotoolkit/2020.4/\
+  l_openvino_toolkit_runtime_raspbian_p_2020.4.287.tgz 
+sudo tar -zxvf l_openvino_toolkit_runtime_raspbian_p_2020.4.287.tgz --strip 1 \ -C ~/intel/openvino
+</code></pre>
+<h2 id="2安装需要的工具">2.安装需要的工具</h2>
+<pre><code class="language-shell">sudo apt install cmake
+sudo apt-get install libgflags-dev
+</code></pre>
+<h2 id="3设置环境变量">3.设置环境变量</h2>
+<p>直接将环境变量写入.bashrc文件</p>
+<pre><code class="language-shell">echo &quot;source ~/intel/openvino/bin/setupvars.sh&quot; &gt;&gt; ~/.bashrc
+source ~/.bashrc 
+</code></pre>
+<p>显示已经初始化完成<br>
+[setupvars.sh] OpenVINO environment initialized</p>
+<h2 id="4添加usb规则">4.添加USB规则</h2>
+<p>不添加规则，树莓派无法访问设备</p>
+<pre><code class="language-shell">sudo usermod -a -G users &quot;$(whoami)&quot;
+</code></pre>
+<p>退出重新登录</p>
+<pre><code class="language-shell">sh ~/intel/openvino/install_dependencies/install_NCS_udev_rules.sh
+</code></pre>
+<h1 id="2运行测试">2.运行测试</h1>
+<h2 id="1创建文件夹编译样例">1.创建文件夹编译样例</h2>
+<pre><code class="language-shell">cd ~/intel/openvino/deployment_tools/inference_engine/samples/c
+mkdir build
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=&quot;-march=armv7-a&quot;
+ make -j4 object_detection_sample_ssd
+</code></pre>
+<h2 id="2下载权重文件">2.下载权重文件</h2>
+<p>这里是官方自己的训练权重，以后用自己的模型，也需要提前训练好权重文件，并且转换为计算棒支持的格式<br>
+现在的文件夹为：<br>
+~/intel/openvino/deployment_tools/inference_engine/samples/c</p>
+<pre><code class="language-shell">wget --no-check-certificate https://download.01.org/openvinotoolkit/2018_R4/open_model_zoo/face-detection-adas-0001/FP16/face-detection-adas-0001.bin
+
+wget --no-check-certificate https://download.01.org/openvinotoolkit/2018_R4/open_model_zoo/face-detection-adas-0001/FP16/face-detection-adas-0001.xml
+</code></pre>
+<h2 id="3运行示例">3.运行示例</h2>
+<pre><code class="language-shell">./armv7l/Release/object_detection_sample_ssd_c -m face-detection-adas-0001.xml -d MYRIAD -i  图片路径
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[【2020-8-9】APM,PX4,GAZEBO,MAVLINK,MAVROS,ROS之间的关系以及科研设备选型]]></title>
         <id>https://kids0cn.github.io/post/HsNe95_fp/</id>

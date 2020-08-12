@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>【8-11】树莓派上部署英特尔神经网络计算棒Intel NCS2 | kids&#39;s Blogger</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://kids0cn.github.io/favicon.ico?v=1597197303854">
+<link rel="stylesheet" href="https://kids0cn.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="如果需要在树莓派上进行神经网络和计算机视觉的操作，仅仅依靠树莓派的性能，是远远不够的。而英特尔神经计算棒就可以用来进行CV的计算，从而在树莓派上部署人脸识别，手势识别之类的CV算法。
+注意：
+
+树莓派必须使用树莓派官方系统Raspian。
+..." />
+    <meta name="keywords" content="计算机视觉,深度学习,开发板" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://kids0cn.github.io">
+        <img src="https://kids0cn.github.io/images/avatar.png?v=1597197303854" class="site-logo">
+        <h1 class="site-title">kids&#39;s Blogger</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      精耕细作
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">心</a> | <a class="rss" href="https://kids0cn.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">【8-11】树莓派上部署英特尔神经网络计算棒Intel NCS2</h2>
+            <div class="post-date">2020-08-11</div>
+            
+            <div class="post-content" v-pre>
+              <p>如果需要在树莓派上进行神经网络和计算机视觉的操作，仅仅依靠树莓派的性能，是远远不够的。而英特尔神经计算棒就可以用来进行CV的计算，从而在树莓派上部署人脸识别，手势识别之类的CV算法。<br>
+<strong>注意：</strong></p>
+<ul>
+<li>树莓派必须使用树莓派官方系统Raspian。</li>
+<li>树莓派上部署的工具包，仅能用来进行计算推理，其余功能需要用笔记本或者台式计算机。</li>
+<li>官网的安装目录为 /opt/intel/openvino，也有博客建议安装到自己的本地目录，这里安装在~/intel/openvino</li>
+</ul>
+<h1 id="1驱动安装">1.驱动安装</h1>
+<h2 id="1下载安装包">1.下载安装包</h2>
+<pre><code class="language-shell">sudo mkdir -p ~/intel/openvino #建立一个文件夹
+wget https://download.01.org/opencv/2020/openvinotoolkit/2020.4/\
+  l_openvino_toolkit_runtime_raspbian_p_2020.4.287.tgz 
+sudo tar -zxvf l_openvino_toolkit_runtime_raspbian_p_2020.4.287.tgz --strip 1 \ -C ~/intel/openvino
+</code></pre>
+<h2 id="2安装需要的工具">2.安装需要的工具</h2>
+<pre><code class="language-shell">sudo apt install cmake
+sudo apt-get install libgflags-dev
+</code></pre>
+<h2 id="3设置环境变量">3.设置环境变量</h2>
+<p>直接将环境变量写入.bashrc文件</p>
+<pre><code class="language-shell">echo &quot;source ~/intel/openvino/bin/setupvars.sh&quot; &gt;&gt; ~/.bashrc
+source ~/.bashrc 
+</code></pre>
+<p>显示已经初始化完成<br>
+[setupvars.sh] OpenVINO environment initialized</p>
+<h2 id="4添加usb规则">4.添加USB规则</h2>
+<p>不添加规则，树莓派无法访问设备</p>
+<pre><code class="language-shell">sudo usermod -a -G users &quot;$(whoami)&quot;
+</code></pre>
+<p>退出重新登录</p>
+<pre><code class="language-shell">sh ~/intel/openvino/install_dependencies/install_NCS_udev_rules.sh
+</code></pre>
+<h1 id="2运行测试">2.运行测试</h1>
+<h2 id="1创建文件夹编译样例">1.创建文件夹编译样例</h2>
+<pre><code class="language-shell">cd ~/intel/openvino/deployment_tools/inference_engine/samples/c
+mkdir build
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=&quot;-march=armv7-a&quot;
+ make -j4 object_detection_sample_ssd
+</code></pre>
+<h2 id="2下载权重文件">2.下载权重文件</h2>
+<p>这里是官方自己的训练权重，以后用自己的模型，也需要提前训练好权重文件，并且转换为计算棒支持的格式<br>
+现在的文件夹为：<br>
+~/intel/openvino/deployment_tools/inference_engine/samples/c</p>
+<pre><code class="language-shell">wget --no-check-certificate https://download.01.org/openvinotoolkit/2018_R4/open_model_zoo/face-detection-adas-0001/FP16/face-detection-adas-0001.bin
+
+wget --no-check-certificate https://download.01.org/openvinotoolkit/2018_R4/open_model_zoo/face-detection-adas-0001/FP16/face-detection-adas-0001.xml
+</code></pre>
+<h2 id="3运行示例">3.运行示例</h2>
+<pre><code class="language-shell">./armv7l/Release/object_detection_sample_ssd_c -m face-detection-adas-0001.xml -d MYRIAD -i  图片路径
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://kids0cn.github.io/tag/36qpgS834/" class="tag">
+                    计算机视觉
+                  </a>
+                
+                  <a href="https://kids0cn.github.io/tag/xHzx86rHEN/" class="tag">
+                    深度学习
+                  </a>
+                
+                  <a href="https://kids0cn.github.io/tag/XLEzHCr4LE/" class="tag">
+                    开发板
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://kids0cn.github.io/post/HsNe95_fp/">
+                  <h3 class="post-title">
+                    【2020-8-9】APM,PX4,GAZEBO,MAVLINK,MAVROS,ROS之间的关系以及科研设备选型
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '11076abfacddf9b0bd8a',
+        clientSecret: 'cf5e6000930d960e01f7cabe95886fa6101955de',
+        repo: 'kids0cn.github.io',
+        owner: 'kids0cn',
+        admin: ['kids0cn'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
