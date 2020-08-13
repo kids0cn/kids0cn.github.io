@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://kids0cn.github.io</id>
     <title>kids&apos;s Blogger</title>
-    <updated>2020-08-13T12:02:09.468Z</updated>
+    <updated>2020-08-13T12:03:29.485Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://kids0cn.github.io"/>
     <link rel="self" href="https://kids0cn.github.io/atom.xml"/>
@@ -12,10 +12,65 @@
     <rights>All rights reserved 2020, kids&apos;s Blogger</rights>
     <entry>
         <title type="html"><![CDATA[【8-12】树莓派部署t265+px4飞控实现无人机视觉定位]]></title>
-        <id>https://kids0cn.github.io/post/S82ajP8RS/</id>
-        <link href="https://kids0cn.github.io/post/S82ajP8RS/">
+        <id>https://kids0cn.github.io/post/4sAda0mhj/</id>
+        <link href="https://kids0cn.github.io/post/4sAda0mhj/">
         </link>
-        <updated>2020-08-12T07:33:06.000Z</updated>
+        <updated>2020-08-13T12:02:31.000Z</updated>
+        <content type="html"><![CDATA[<p>在之前的<a href="https://kids0cn.github.io/post/qZKoxBQGg/">文章</a>中，我们已经成功在树莓派（ubuntu mate 18.04）上部署了T265的追踪摄像头。本文将利用MAVROS协议，将T265测量的位姿信息发送给px4固件，实现室内室外无GPS情况下的视觉定位。</p>
+<h2 id="0预操作">0.预操作</h2>
+<p>前提是树莓派中已经安装了如下组件：</p>
+<ul>
+<li>T265驱动和相应的ROS驱动</li>
+<li>ROS系统</li>
+<li>MAVROS包</li>
+<li>树莓派已经通过usb或者串口和飞控硬件链接</li>
+<li>注意安装位置，可以查看T265的官方文档，了解默认的坐标。安装在飞机上时，镜头正对着地面即可不调整飞机和摄像头的坐标位置。</li>
+</ul>
+<h2 id="1视觉里程计介绍vio">1.视觉里程计介绍（VIO）</h2>
+<p>VIO是一种用来估计移动物体速度和3D位置(局部位置和姿态)的计算机视觉技术。通常用于在GPS信号缺失或者不可靠的情况下的导航(例如在室内或者在桥下飞行)。<br>
+VIO采用视觉里程计(Visual Odometry)，通过相机的图像以及结合设备的IMU的惯性测量结果，去估计设备的位置。<br>
+本文介绍PX4以及机载电脑如何设置VIO。本文介绍的方法是通过ROS将VIO的信息传输给PX4，PX4本身不在乎接收到的里程信息是从何处传来的。</p>
+<h2 id="2安装中介包">2.安装中介包</h2>
+<p>T265本身带IMU，可以实时获取机身在三维空间的坐标已经高度和速度信息，将它获取的数据发布给px4的飞行控制器，飞控可以根据这些信息进入position模式（定点）。<br>
+中介包有两个，安装自己需要的就行</p>
+<ul>
+<li>PX4官方写的VIO：https://github.com/Auterion/VIO</li>
+<li>APM写的t265_to_mavros：https://github.com/thien94/vision_to_mavros</li>
+</ul>
+<h2 id="3px4固件调参">3.PX4固件调参</h2>
+<p>连接QGC地面站，关于地面站的介绍见这篇<a href="https://kids0cn.github.io/post/HsNe95_fp/">文章</a>。</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Setting for External Position Estimation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://docs.px4.io/master/zh/advanced_config/parameter_reference.html#EKF2_AID_MASK">EKF2_AID_MASK</a></td>
+<td>Set <em>vision position fusion</em>, <em>vision velocity fusion</em>, <em>vision yaw fusion</em> and <em>external vision rotation</em> accoring to your desired fusion model.</td>
+</tr>
+<tr>
+<td><a href="https://docs.px4.io/master/zh/advanced_config/parameter_reference.html#EKF2_HGT_MODE">EKF2_HGT_MODE</a></td>
+<td>Set to <em>Vision</em> to use the vision a primary source for altitude estimation.</td>
+</tr>
+<tr>
+<td><a href="https://docs.px4.io/master/zh/advanced_config/parameter_reference.html#EKF2_EV_DELAY">EKF2_EV_DELAY</a></td>
+<td>Set to the difference between the timestamp of the measurement and the &quot;actual&quot; capture time. For more information see <a href="https://docs.px4.io/master/zh/computer_vision/visual_inertial_odometry.html#tuning-EKF2_EV_DELAY">below</a>.</td>
+</tr>
+<tr>
+<td><a href="https://docs.px4.io/master/zh/advanced_config/parameter_reference.html#EKF2_EV_POS_X">EKF2_EV_POS_X</a>, <a href="https://docs.px4.io/master/zh/advanced_config/parameter_reference.html#EKF2_EV_POS_Y">EKF2_EV_POS_Y</a>, <a href="https://docs.px4.io/master/zh/advanced_config/parameter_reference.html#EKF2_EV_POS_Z">EKF2_EV_POS_Z</a></td>
+<td>Set the position of the vision sensor with respect to the vehicles body frame.</td>
+</tr>
+</tbody>
+</table>
+<p>如果被正确配置，通过QGC地面站中的ANYLAZE中的ODOMETRY中查看实时获取的信息。<br>
+也可以通过MAVROS发布的ROS节点查看信息</p>
+<pre><code class="language-shell">rostopic echo vision_pose/pose
+</code></pre>
+<p>这个时候移动T265，数值会实时发生变化。</p>
+]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[【8-12】树莓派ubuntu升级Cmake]]></title>
