@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>【8-14】树莓派3B+ Ubuntu Mate 18.04使用Intel NCS2做人脸识别 | kids&#39;s Blogger</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://kids0cn.github.io/favicon.ico?v=1597391920047">
+<link rel="stylesheet" href="https://kids0cn.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="想要在无人机平台部署CV，但是无人机的机载电脑需要安装ROS，而ROS需要在Ubuntu的平台才能方便使用，所以树莓派3B+上安装的是Ubuntu Mate18.04。
+Intel Ncs2（英特尔神经计算棒）官方的文档写的是部署在树莓派官..." />
+    <meta name="keywords" content="计算机视觉,无人机,开发板" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://kids0cn.github.io">
+        <img src="https://kids0cn.github.io/images/avatar.png?v=1597391920047" class="site-logo">
+        <h1 class="site-title">kids&#39;s Blogger</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      精耕细作
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">心</a> | <a class="rss" href="https://kids0cn.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">【8-14】树莓派3B+ Ubuntu Mate 18.04使用Intel NCS2做人脸识别</h2>
+            <div class="post-date">2020-08-14</div>
+            
+            <div class="post-content" v-pre>
+              <p>想要在无人机平台部署CV，但是无人机的机载电脑需要安装ROS，而ROS需要在Ubuntu的平台才能方便使用，所以树莓派3B+上安装的是Ubuntu Mate18.04。<br>
+Intel Ncs2（英特尔神经计算棒）官方的文档写的是部署在树莓派官方系统上，而对于其他平台甚至树莓派平台其他版本的系统都不提供支持。<br>
+我在安装Intel Nc2到树莓派上时也遇到了很多坑，初始化setupvar.sh的时候，报错</p>
+<pre><code class="language-shell">64 bitness python is required
+</code></pre>
+<p>然后执行demo的时候，自动退出，没法使用。</p>
+<p>后来想要在树莓派上直接编译官方的github，也是国外的一篇文章上推荐的。在编译的时候因为被墙，一直疯狂报错，后来连接手机热点，成功编译，但是这时根本找不到如何使用的方法，官方也没有相关文档。最后通过修改setupvar.sh，成功安装。</p>
+<h2 id="1intel-ncs2安装">1.Intel Ncs2安装</h2>
+<p>下载固件：https://download.01.org/opencv/2020/openvinotoolkit/2020.4/ 并上传到树莓派</p>
+<h3 id="11下载解压">1.1下载解压</h3>
+<pre><code class="language-shell">cd ~
+mkdir intel 
+tar -zxvf l_openvino_toolkit_runtime_raspbian_p_2020.4.287.tgz #解压缩
+mv  l_openvino_toolkit_runtime_raspbian_p_2020.4.287.tgz openvino  # 重命名
+
+</code></pre>
+<h3 id="12修改setupvarsh">1.2修改setupvar.sh</h3>
+<pre><code class="language-shell">1.
+INSTALLDIR=/home/pi/intel/openvino  # 修改开头的安装目录 为你自己的安装目录
+
+2.
+if [ &quot;$python_bitness&quot; != &quot;&quot; ] &amp;&amp; [ &quot;$python_bitness&quot; != &quot;64&quot; ] &amp;&amp; [ &quot;$OS_NAME&quot; != &quot;Raspian&quot; ]; then
+    echo &quot;[setupvars.sh] 64 bitness for Python&quot; $python_version &quot;is requred&quot;
+
+修改为
+if [ &quot;$python_bitness&quot; != &quot;&quot; ] &amp;&amp; [ &quot;$python_bitness&quot; != &quot;64&quot; ] &amp;&amp; [ &quot;$OS_NAME&quot; != &quot;Ubuntu&quot; ]; then
+    echo &quot;[setupvars.sh] 64 bitness for Python&quot; $python_version &quot;is requred&quot;
+</code></pre>
+<p>修改之后，添加到bashrc</p>
+<pre><code class="language-shell">echo &quot;source ~/intel/openvino/bin/setupvars.sh&quot; &gt;&gt; ~/.bashrc
+</code></pre>
+<p>仅仅出现下面的提示，就成功了<br>
+[setupvars.sh] OpenVINO environment initialized</p>
+<h3 id="13-更新usb规则">1.3 更新USB规则</h3>
+<pre><code class="language-shell">sudo usermod -a -G users &quot;$(whoami)&quot;
+sh ~/intel/openvino/install_dependencies/install_NCS_udev_rules.sh
+</code></pre>
+<h2 id="2运行样例">2.运行样例</h2>
+<pre><code class="language-shell"> mkdir build &amp;&amp; cd build
+ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=&quot;-march=armv7-a&quot; \ 
+  ~/intel/openvino/deployment_tools/inference_engine/samples/c
+  make -j2 object_detection_sample_ssd_c
+# 切换到生成的目录
+cd ~/intel/openvino/build/armv7l/Release
+# 下载训练好的权重
+ wget --no-check-certificate https://download.01.org/opencv/2020/  \   openvinotoolkit/2020.1/open_model_zoo/models_bin/1/face-detection-adas-0001/   \ FP16/face-detection-adas-0001.bin
+
+ wget --no-check-certificate https://download.01.org/opencv/2020/  \   openvinotoolkit/2020.1/open_model_zoo/models_bin/1/face-detection-adas-0001/  \ FP16/face-detection-adas-0001.xml
+
+# 执行测试
+./object_detection_sample_ssd_c -m face-detection-adas-0001.xml -d MYRIAD -i /home/pi/face.jpg
+</code></pre>
+<h2 id="3运行视频的人脸检测">3.运行视频的人脸检测</h2>
+<p>效果：https://www.bilibili.com/video/BV17p4y1v7bx/</p>
+<pre><code class="language-python">import cv2 as cv
+import numpy as np
+# 载入模型
+net = cv.dnn.readNet('face-detection-adas-0001.xml','face-detection-adas-0001.bin')
+
+# 选择目标设备
+net.setPreferableTarget(cv.dnn.DNN_TARGET_MYRIAD)
+
+# 读取图片
+print('读取视频')
+frame = cv.VideoCapture('/home/pi/face.mp4')
+fps = frame.get(cv.CAP_PROP_FPS)
+size = (int(frame.get(cv.CAP_PROP_FRAME_WIDTH)), int(frame.get(cv.CAP_PROP_FRAME_HEIGHT)))
+output = cv.VideoWriter('/home/pi/face_out.avi',cv.VideoWriter_fourcc(*'XVID'), fps, size)
+
+while(frame.isOpened()):
+    ret, fra = frame.read()
+    if ret==True:
+        blob = cv.dnn.blobFromImage(fra, size=(672,384), ddepth=cv.CV_8U) 
+        net.setInput(blob)         
+        out = net.forward()
+        print('开始处理第一帧')
+        # Draw detected faces on the frame 
+        for detection in out.reshape(-1, 7): 
+            confidence = float(detection[2]) 
+            xmin = int(detection[3] * fra.shape[1]) 
+            ymin = int(detection[4] * fra.shape[0]) 
+            xmax = int(detection[5] * fra.shape[1]) 
+            ymax = int(detection[6] * fra.shape[0])
+            if confidence &gt; 0.5:
+                cv.rectangle(fra, (xmin, ymin), (xmax, ymax), color=(0, 255, 0))
+        output.write(fra)
+    else:
+        break
+
+
+frame.release()
+output.release()
+print(&quot;ALL DONE SUCCESSFULLY&quot;)
+
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://kids0cn.github.io/tag/36qpgS834/" class="tag">
+                    计算机视觉
+                  </a>
+                
+                  <a href="https://kids0cn.github.io/tag/C_j0kTYD16/" class="tag">
+                    无人机
+                  </a>
+                
+                  <a href="https://kids0cn.github.io/tag/XLEzHCr4LE/" class="tag">
+                    开发板
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://kids0cn.github.io/post/6ZWxURes0/">
+                  <h3 class="post-title">
+                    【8-13】树莓派安装Dronekit套件，实现对无人机的控制
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '11076abfacddf9b0bd8a',
+        clientSecret: 'cf5e6000930d960e01f7cabe95886fa6101955de',
+        repo: 'kids0cn.github.io',
+        owner: 'kids0cn',
+        admin: ['kids0cn'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

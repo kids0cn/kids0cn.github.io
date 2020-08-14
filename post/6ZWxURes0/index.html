@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>【2020-8-8】树莓派+Ubuntu18.04编译Dji Guidance ROS | kids&#39;s Blogger</title>
+<title>【8-13】树莓派安装Dronekit套件，实现对无人机的控制 | kids&#39;s Blogger</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,9 +24,8 @@
 
 
 
-    <meta name="description" content="实验室还有一批大疆的M100和配套的Guidance，但是一直没有玩起来，大疆官方也早就抛弃了这个平台，不再提供技术支持。
-今天在树莓派上编译Intel Realsense的固件的时候，看到大疆之前还提供了适用于16.04的guidance..." />
-    <meta name="keywords" content="无人机,ROS,Robot" />
+    <meta name="description" content="Dronekit是一套对MAVLink的封装，简化了控制的方法，可以实现通过Python语言对无人机的控制。Dronekit不仅能直接部署在树莓派上实现对无人机的控制，也可以部署在台式机上，通过数传发送无人机的控制指令，这样就可以用台式机进..." />
+    <meta name="keywords" content="" />
   </head>
   <body>
     <div id="app" class="main">
@@ -97,108 +96,60 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">【2020-8-8】树莓派+Ubuntu18.04编译Dji Guidance ROS</h2>
-            <div class="post-date">2020-08-08</div>
-            
-              <div class="feature-container" style="background-image: url('https://kids0cn.github.io/post-images/TGQMWjI7t.png')">
-              </div>
+            <h2 class="post-title">【8-13】树莓派安装Dronekit套件，实现对无人机的控制</h2>
+            <div class="post-date">2020-08-13</div>
             
             <div class="post-content" v-pre>
-              <p>实验室还有一批大疆的M100和配套的Guidance，但是一直没有玩起来，大疆官方也早就抛弃了这个平台，不再提供技术支持。<br>
-今天在树莓派上编译Intel Realsense的固件的时候，看到大疆之前还提供了适用于16.04的guidance_ros的包，就试着编译了一下。结果正常，只需要修改一些地方。明天用到机器上试试。<br>
-由于dji在16年发布，17年基本上就被大疆抛弃了，所以只能识别出openc2。所以修改掉源文件的CMakelist。</p>
-<pre><code class="language-c">cmake_minimum_required(VERSION 2.8.3)
-project(guidance)
-
-find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  cv_bridge
-  std_msgs
-  sensor_msgs
-  geometry_msgs
-)
-#####
-find_package(OpenCV 2 REQUIRED core highgui)
-#####
-catkin_package(
-)
-
-include_directories(
-  ${OpenCV_INCLUDE_DIRS}
-  ${catkin_INCLUDE_DIRS}
-  include
-)
-
-message(&quot;System is: &quot; ${CMAKE_SYSTEM_PROCESSOR})
-if (${CMAKE_SYSTEM_NAME} MATCHES &quot;Linux&quot;)
-  if (CMAKE_SIZEOF_VOID_P EQUAL 4)
-    message(&quot;-- 32bit detected&quot;)
-    link_directories(lib/x86)
-  elseif (CMAKE_SIZEOF_VOID_P EQUAL 8)
-    message(&quot;-- 64bit detected&quot;)
-    link_directories(lib/x64)
-  endif ()
-else()
-  message(&quot;-- Non-linux platform detected but sorry we do not support :D&quot;)
-endif ()
-
-if (${CMAKE_SYSTEM_PROCESSOR} MATCHES &quot;armv7l&quot; )
-  message(&quot;-- &quot; ${CMAKE_SYSTEM_PROCESSOR} &quot; detected&quot;)
-  link_directories(lib/XU3)
-else ()
-endif ()
-
-##cyril add the following
-message(STATUS &quot;OpenCV library status:&quot;)
-message(STATUS &quot;    version: ${OpenCV_VERSION}&quot;)
-message(STATUS &quot;    libraries: ${OpenCV_LIBS}&quot;)
-message(STATUS &quot;    include path: ${OpenCV_INCLUDE_DIRS}&quot;)
-
-link_libraries(
-  ${OpenCV_LIBS}
-  ${catkin_LIBRARIES}
-  DJI_guidance
-
-  usb-1.0
-  yaml-cpp)
-
-add_executable(guidanceNode
-  src/GuidanceNode.cpp
-  src/DJI_utility.cpp)
-
-add_executable(guidanceNodeTest
-  src/GuidanceNodeTest.cpp)
-
-add_executable(guidanceNodeCalibration
-  src/GuidanceNodeCalibration.cpp
-  src/DJI_utility.cpp)
+              <p>Dronekit是一套对MAVLink的封装，简化了控制的方法，可以实现通过Python语言对无人机的控制。Dronekit不仅能直接部署在树莓派上实现对无人机的控制，也可以部署在台式机上，通过数传发送无人机的控制指令，这样就可以用台式机进行人工智能的计算，然后结果发送给无人机执行。<br>
+本文选择的是部署在树莓派上，通过树莓派直接控制飞控，实现无人机自主飞行。</p>
+<h2 id="0树莓派连接无人机">0.树莓派连接无人机</h2>
+<p>连接三个口：GND、RT、TX<br>
+<img src="https://kids0cn.github.io/post-images/1597321016561.png" alt="" loading="lazy"></p>
+<h2 id="1将树莓派3b的无线网卡设置为ap模式">1.将树莓派3B+的无线网卡设置为ap模式</h2>
+<p>这样在无人机在室外，可以通过热点登录无人机进行控制。</p>
+<pre><code class="language-shell"># 1.clone软件仓库
+git clone https://github.com/oblique/create_ap
+# 2.安装依赖库
+sudo apt-get install util-Linux procps hostapd iproute2 iw haveged dnsmasq
+# 3.编译
+cd create_ap
+make install
+# 4.创建热点
+sudo create_ap wlan0 eth0 热点名 密码
+# 5.开机启动
+sudo create_ap wlan0 eth0 热点名 密码 添加到/etc/rc.local当中
 </code></pre>
-<p>修改标注出来的地方，去掉2就行。</p>
+<h2 id="2安装dronekit套件">2.安装Dronekit套件</h2>
+<h3 id="21-设置pip源">2.1 设置pip源</h3>
+<p>新建 ~/.config/pip.conf后写入</p>
+<pre><code class="language-shell">[global]
+timeout = 60
+index-url = http://pypi.douban.com/simple
+trusted-host = pypi.douban.com
+</code></pre>
+<h3 id="22-安装依赖">2.2 安装依赖</h3>
+<pre><code class="language-shell">sudo apt-get install python3-pip python3-dev libxml2 libxslt-dev
+pip install pyserial    //python2
+pip3 install pyserial   //python3
+pip3 install future
+</code></pre>
+<h3 id="23-安装套件">2.3 安装套件</h3>
+<pre><code class="language-shell">pip3 install dronekit
+pip3 install dronekit-sitl  # 模拟器，选装，我们自己用的是Gazebo
+pip3 install mavproxy # 安装mavlink的转接程序
+</code></pre>
+<h2 id="3测试">3.测试</h2>
+<pre><code class="language-shell">
+</code></pre>
 
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://kids0cn.github.io/tag/C_j0kTYD16/" class="tag">
-                    无人机
-                  </a>
-                
-                  <a href="https://kids0cn.github.io/tag/SRJIwj_lQ7/" class="tag">
-                    ROS
-                  </a>
-                
-                  <a href="https://kids0cn.github.io/tag/letIOJ6hIU/" class="tag">
-                    Robot
-                  </a>
-                
-              </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://kids0cn.github.io/post/qZKoxBQGg/">
+                <a href="https://kids0cn.github.io/post/4sAda0mhj/">
                   <h3 class="post-title">
-                    【20-8-7】树莓派上部署英特尔深度相机IntelRealsense T265
+                    【8-12】树莓派部署t265+px4飞控实现无人机视觉定位
                   </h3>
                 </a>
               </div>
