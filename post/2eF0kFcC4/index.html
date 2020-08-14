@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>关于 | kids&#39;s Blogger</title>
+<title>【8-13】virtualenv和virtualenv wrapper的使用 | kids&#39;s Blogger</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,15 +24,13 @@
 
 
 
-    <meta name="description" content="
-欢迎来到我的小站呀，很高兴遇见你！🤝
+    <meta name="description" content="跟conda类似的Python虚拟环境管理工具，jetson nano暂时无法使用conda
+1.virtualenv
+#安装
+sudo pip install virtualenv
 
-🏠 关于本站
-👨‍💻 博主是谁
-⛹ 兴趣爱好
-📬 联系我呀
-..." />
-    <meta name="keywords" content="" />
+#虚拟环境创建      虚拟环境会以文件夹的形式放在..." />
+    <meta name="keywords" content="Python,命令行,Linux" />
   </head>
   <body>
     <div id="app" class="main">
@@ -103,20 +101,83 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">关于</h2>
-            <div class="post-date">2019-01-25</div>
+            <h2 class="post-title">【8-13】virtualenv和virtualenv wrapper的使用</h2>
+            <div class="post-date">2020-08-14</div>
             
             <div class="post-content" v-pre>
-              <blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
-</blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<h2 id="兴趣爱好">⛹ 兴趣爱好</h2>
-<h2 id="联系我呀">📬 联系我呀</h2>
+              <p>跟conda类似的Python虚拟环境管理工具，jetson nano暂时无法使用conda</p>
+<h2 id="1virtualenv">1.virtualenv</h2>
+<pre><code class="language-shell">#安装
+sudo pip install virtualenv
+
+#虚拟环境创建      虚拟环境会以文件夹的形式放在~/.virtualenv下面
+virtaulenv -p Python版本 虚拟环境名字
+
+#进入环境
+source path_to_virutal_enviroment/bin/activate
+
+·source test/bin/activate
+·cd test;source bin/activate
+
+#退出环境
+deactivate
+
+#删除环境
+直接删除环境文件夹
+</code></pre>
+<h2 id="2virtualenv-wrapper">2.virtualenv wrapper</h2>
+<pre><code class="language-shell">#安装
+sudo install virtualenvwrapper
+
+#设置自动启动wrapper
+把下列命令写入 ~/.bashrc 
+source /usr/local/bin/virtualenvwrapper.sh
+
+#创建环境
+mkvirtualenv [-a project_path] [-i package] [-r requirements_file] [-p python版本] 名字
+
+#切换工作环境
+workon 名字
+
+#退出
+deactivate
+
+#删除环境
+rmvirtualenv 名字
+
+#列出所有环境
+lsvirtualenv 
+-b:简短形式
+-l:默认的详细信息输出
+</code></pre>
 
             </div>
             
+              <div class="tag-container">
+                
+                  <a href="https://kids0cn.github.io/tag/EkAQDLEPA/" class="tag">
+                    Python
+                  </a>
+                
+                  <a href="https://kids0cn.github.io/tag/Mu4_iqqd3D/" class="tag">
+                    命令行
+                  </a>
+                
+                  <a href="https://kids0cn.github.io/tag/flgGOwNfff/" class="tag">
+                    Linux
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://kids0cn.github.io/post/2qwuZe9Au/">
+                  <h3 class="post-title">
+                    【8-14】树莓派3B+ Ubuntu Mate 18.04使用Intel NCS2做人脸识别
+                  </h3>
+                </a>
+              </div>
             
 
             
