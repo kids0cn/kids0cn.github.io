@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://kids0cn.github.io</id>
     <title>kids&apos;s Blogger</title>
-    <updated>2020-08-14T08:02:12.205Z</updated>
+    <updated>2020-08-22T06:12:31.219Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://kids0cn.github.io"/>
     <link rel="self" href="https://kids0cn.github.io/atom.xml"/>
@@ -10,6 +10,15 @@
     <logo>https://kids0cn.github.io/images/avatar.png</logo>
     <icon>https://kids0cn.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, kids&apos;s Blogger</rights>
+    <entry>
+        <title type="html"><![CDATA[【8-19】目前主流无人自主飞行上位机套件]]></title>
+        <id>https://kids0cn.github.io/post/MqcD5hVjc/</id>
+        <link href="https://kids0cn.github.io/post/MqcD5hVjc/">
+        </link>
+        <updated>2020-08-19T12:33:17.000Z</updated>
+        <content type="html"><![CDATA[<p>无人机与无人车不同，需要在三维空间中保持稳态。无人车在没有持续不断的控制信号传入时，会在地面保持静止，即使在控制过程中突然中断信号，无人车也不会出现大的损害。而无人机平台，本身克服地心引力，就需要飞控控制马达一一定的速度旋转。而这种稳态仅仅是在Z轴的稳定。在各种</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[【8-14】virtualenv和virtualenv wrapper的使用]]></title>
         <id>https://kids0cn.github.io/post/2eF0kFcC4/</id>
@@ -596,233 +605,6 @@ source ~/.bashrc
 <h3 id="3使用">3.使用</h3>
 <p>启动节点</p>
 <pre><code class="language-shell">roslaunch realsense2_camera rs_camera.launch
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[玩转VIM]]></title>
-        <id>https://kids0cn.github.io/post/sfK70jTHc/</id>
-        <link href="https://kids0cn.github.io/post/sfK70jTHc/">
-        </link>
-        <updated>2020-07-26T12:29:10.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="1vim编辑">1.Vim编辑</h2>
-<h3 id="11-vim模式和基本操作">1.1 Vim模式和基本操作</h3>
-<h4 id="111-command模式">1.1.1 Command模式</h4>
-<p>（1）分屏：<br>
-<strong>:vs(vertical split)</strong> 垂直分屏<br>
-<strong>:sp(split)</strong> 水平分屏<br>
-（2）全局替换<br>
-<strong>:%s/foo/bar/g</strong></p>
-<h4 id="112-normal模式">1.1.2 Normal模式</h4>
-<p>快速切换到Normal模式:<strong>&lt;c-[&gt;</strong>；<strong><c-c></strong>（这个不好，有时会中断插件）</p>
-<h4 id="113-insert模式">1.1.3 Insert模式</h4>
-<p>（1）小写指令:<br>
-<strong>i(insert)</strong>:光标前插入;<strong>a(append)</strong>:光标后插入;<strong>o(open a newline)</strong>:新行插入<br>
-（3）大写指令<br>
-<strong>I</strong>:行前插入；<strong>A</strong>:行尾插入；<strong>O</strong>：往上开新行<br>
-（3）编辑模式快速纠错<br>
-均是linux命令行通用快捷键，可以在命令行输入命令时使用<br>
-<strong><c-h></strong>:删除上一个字符；<strong><c-w></strong>:删除上一个单词;<strong><c-u></strong>:删除当前行<br>
-注意，这些快捷操作是命令行提供的功能，用<c-u>无法恢复</p>
-<h4 id="114-visual模式">1.1.4 Visual模式</h4>
-<p><strong>v</strong>:行选择 ； <strong><c-v></strong>:块选择</p>
-<h3 id="12-vim快速移动">1.2 Vim快速移动</h3>
-<h4 id="121基本移动">1.2.1基本移动</h4>
-<p>(1)h,j,k,l移动<br>
-(2)单词间移动<br>
-<strong>w/W</strong>：下一个单词开头；<strong>b/B</strong>：上一个单词开头;<strong>e/E</strong>：下一个单词的末尾</p>
-<h4 id="122行间搜索移动">1.2.2行间搜索移动</h4>
-<p><strong>f(find){char}</strong>：移动到char上，<strong>,</strong>:上一个、<strong>;</strong>:下一个<br>
-F反过来搜索</p>
-<h4 id="123水平和搜索移动">1.2.3水平和搜索移动</h4>
-<p>（1）水平：<br>
-<strong>0</strong>:行首第一个字符；<strong>^</strong>:行首第一个非空白字符<br>
-<strong>$</strong>:行尾最后一个字符；<strong>g_</strong>:行尾最后一个非空白字符<br>
-（2)垂直：<br>
-<strong>()</strong>:句子间；<strong>{}</strong>:段落间</p>
-<h4 id="124页面间移动">1.2.4页面间移动</h4>
-<p><strong>gg</strong>:文件开头;<strong>G</strong>:文件结尾<br>
-<strong><c-o></strong>:快速返回<br>
-<strong>H/M/L</strong>:屏幕的开头(Head)/中间(Middle)/结尾(Low)<br>
-<strong><c-u>/<c-f></strong>:upward/forward 山下翻页<br>
-<strong>zz</strong>:当前行移动到屏幕中间</p>
-<h3 id="13-vim快速增删改查">1.3 vim快速增删改查</h3>
-<h4 id="131-增">1.3.1 增</h4>
-<p>进入insert模式</p>
-<h4 id="132-删">1.3.2 删</h4>
-<p><strong>x</strong>:删除一个字符；<strong>2x</strong>:删除两个字符<br>
-<strong>dw</strong>:删除一个单词;<strong>dt</strong>:删除直到(dt &quot;:删除直到&quot;字符);<strong>d0</strong>:删除到行首; <strong>d$</strong> 删除到行尾;<strong>2dd</strong>:删除2行</p>
-<h5 id="133-改">1.3.3 改</h5>
-<p><strong>r(replace)</strong>:修改一个字符；<strong>c(change)</strong>:修改一个字符;<strong>s(substitute)</strong>:修改一个字符并进入insert模式<br>
-<strong>R</strong>:不停替换；<strong>S</strong>:删除整行并进入insert模式</p>
-<h4 id="134-查">1.3.4 查</h4>
-<p><strong>/</strong>:前向搜索 <strong>?</strong>:反向搜索 ； <strong>n/N</strong> 下一个/上一个匹配</p>
-<h3 id="14-vim进行搜索替换">1.4 vim进行搜索替换</h3>
-<p>substitute命令允许我们进行搜索替换，并支持正则表达式<br>
-<strong>:[range]s(ubstitute)/{parttern}/{string}/[flag]</strong><br>
-range(范围)：10，20（从第10行到第20行）；%（全部替换）<br>
-flag(标志)：</p>
-<ul>
-<li>g(global):全局替换</li>
-<li>c(confirm):替换确认</li>
-<li>n(number):不替换，返回匹配次数</li>
-</ul>
-<h3 id="15-vim多文件操作">1.5 vim多文件操作</h3>
-<ul>
-<li><strong>Buffer</strong>:打开文件的内存缓冲区</li>
-<li><strong>Window</strong>:buffer可视化的分割区域</li>
-<li><strong>Tab</strong>:组织window为一个工作区</li>
-</ul>
-<h4 id="151-buffer切换">1.5.1 Buffer切换</h4>
-<p><strong>:ls</strong> 列出缓冲区 |  <strong>:b n</strong> 跳转到n<br>
-<strong>:bpre | bnext | bfisrt | blast | :b buf_name</strong></p>
-<h4 id="152-window窗口">1.5.2 window窗口</h4>
-<p>**:sp/<c-w>s **:水平分割   <strong>:vs/<c-w>v</strong> :垂直分割<br>
-**<c-w>w **:循环切换   <strong><c-w>h/j/k/l</strong>     **<c-w>L <strong>：左右互换 ** <c-w>=</strong> :等分</p>
-<h4 id="153-tab">1.5.3 tab</h4>
-<p>用的不多</p>
-<h3 id="16-vim的text-object文本对象">1.6 vim的text object（文本对象）</h3>
-<p>vim中的文本对象指单词、句子、段落，有了文本对象，可以通过指令直接操作对应的文对对象进行操作。<br>
-<strong>[number]<command>[text object]</strong><br>
-例子：<br>
-单词：w  <strong>2dw</strong> ; 句子: s <strong>2ds</strong>;  段落：p  <strong>2dp</strong>  #好像后面两个都没用<br>
-<strong>i (inner):</strong> di“ (删除不包括&quot;)<br>
-**a (around): **  da&quot;(删除包括&quot;)</p>
-<h3 id="17-vim复制粘贴与寄存器的使用">1.7 vim复制粘贴与寄存器的使用</h3>
-<h4 id="171-normal模式的复制粘贴">1.7.1 Normal模式的复制粘贴</h4>
-<p><strong>y(yank)  复制   yy 复制一行</strong> ； <strong>p(paste) 粘贴</strong></p>
-<h4 id="172-insert模式避免乱码">1.7.2 Insert模式避免乱码</h4>
-<p>如果开启了vim的autoindent模式，粘贴时格式会乱掉.<br>
-<strong>:set paste   临时关闭autoindent 进入粘贴模式</strong><br>
-<strong>:set nopaste</strong></p>
-<h4 id="173-寄存器的使用">1.7.3 寄存器的使用</h4>
-<p>每次使用d,y命令时，会把内容放到一个无名寄存器，也可以在操作时指定对应的寄存器，以操作寄存器数据。<br>
-<strong>ayw :</strong> 复制一个单词到寄存器a ;  ** bdd ：**删除一行到寄存器b</p>
-<h4 id="174-使用系统剪贴板">1.7.4 使用系统剪贴板</h4>
-<p>在操作前加上&quot;+&quot;号，如&quot;+yw&quot;<br>
-<strong>:set clipboard=unnamed</strong></p>
-<h4 id="175-vim宏功能macro">1.7.5 Vim宏功能(macro)</h4>
-<p>宏为一系列命令的合集，vim使用q录制，q结束录制,q{register}指定寄存器，@{register}回放</p>
-<h4 id="176-vim补全功能">1.7.6 Vim补全功能</h4>
-<h4 id="177-vim换配色">1.7.7 Vim换配色</h4>
-<p>把配色文件xx.vim放到&quot;～/.vim/colors&quot;下面，vimrc里面写入“colorscheme 要使用的配色名字”</p>
-<h2 id="2vim配置">2.Vim配置</h2>
-<h3 id="21-vim常用配置">2.1 Vim常用配置</h3>
-<pre><code class="language-shell">&quot;设置编码，中文不乱码&quot;
-&quot;encoding选项用于缓存的文本、寄存器、Vim 脚本文件等；&quot;
-&quot;fileencoding选项是Vim写入文件时采用的编码类型；&quot;
-&quot;termencoding选项表示输出到终端时采用的编码类型&quot;
-set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
-set termencoding=utf-8
-set encoding=utf-8 
-
-&quot;显示行号&quot;
-set nu
-
-&quot;突出显示当前行&quot;
-&quot;set cursorline
-set cul
-
-&quot;突出显示当前列&quot;
-&quot;set cursorcolumn
-set cuc
-
-&quot;显示括号匹配&quot;
-set showmatch
-
-&quot;设置缩进&quot;
-&quot;设在tab的长度
-set tabstop=4
-&quot;设置自动缩进长度
-set shiftwidth=4
-&quot;设置自动继承前一行的缩进
-set autoindent
-
-&quot;设置粘贴模式，保证粘贴时格式不乱
-set paste
-
-&quot;显示空格和tab键
-set listchars=tab:&gt;-,trail:-
-
-&quot;总是显示状态栏和当前光标位置
-set laststatus=2
-set ruler
-
-&quot;打开文件类型检测
-filetype plugin indent on
-
-&quot;设置语法高亮
-syntax on
-
-“vim-plug插件配置部分
-call plug#begin(&quot;~/.vim/plugged&quot;)
-Plug 'junegunn/vim-easy-align'
-Plug 'vim-airline/vim-airline'
-Plug 'Shougo/neocomplete.vim'
-Plug 'kien/rainbow_parentheses.vim'
-Plug 'scrooloose/syntastic'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'mhinz/vim-startify'
-call plug#end()
-</code></pre>
-<h3 id="22-vim中的映射">2.2 Vim中的映射</h3>
-<h2 id="3vim-plug配置">3.VIm-Plug配置</h2>
-<p>vim-plug是一款非常轻量又高效的vim插件管理工具。它支持全异步、多线程并行安装插件，支持git分支、标签等，可以对插件进行回滚更新、还支持按需加载插件(On-demand loading)，可以指定对特定文件类型加载对应vim插件，大大加快了vim启动时间。</p>
-<h3 id="1安装">1.安装</h3>
-<p>项目官方地址：https://github.com/junegunn/vim-plug<br>
-vim-plug使用github进行托管和维护，只需要下载对应的 plug.vim 文件并保存到 autoload 目录即可完成安装。</p>
-<h4 id="11安装方式一">1.1安装方式一</h4>
-<pre><code class="language-shell">$mkdir ~/.vim/autoload/
-$cd ~/.vim/autoload/
-$wget https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-</code></pre>
-<h4 id="2安装方式二">2.安装方式二</h4>
-<p>利用curl工具自动完成上述过程</p>
-<pre><code class="language-shell">curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-</code></pre>
-<h3 id="2配置">2.配置</h3>
-<p>在vim配置文件 ~/.vimrc 增加以 call plug#begin(PLUGIN_DIRECTORY) 开始，并以 plug#end() 结束的配置段即可。<br>
-下面是一个典型的vim-plug的配置实例，使用了多种vim-plug相关的配置形式。</p>
-<pre><code class="language-shell">call plug#begin('~/.vim/plugged')
-# 使用缩写形式指定了项目的github地址
-Plug 'junegunn/vim-easy-align'
-#使用全地址形式指定github地址
-Plug 'https://github.com/junegunn/vim-github-dashboard.git'
-#用&quot;|&quot;符号把两个插件写在一行中
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-#使用 按需加载，表明只有在 NERDTreeToggle 命令被调用时, 对应的插件才会被加载；
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-#使用 按需加载，表明只有编辑 clojure 类型的文件时该插件才会被打开；
-Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-#指定使用YCM-Generator插件的stable分支
-Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
-#指定插件所用的git标签，rtp描述了包含im插件的子目录
-Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
-#用 dir 选项单独指定了该插件存放的目录，do选项用于 Post-update hook，指定在安装或者更新完插件后所需要执行的额外操作；
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-#表示不用github托管的本地vim插件
-Plug '~/my-prototype-plugin'
-call plug#end()
-</code></pre>
-<h3 id="3使用">3.使用</h3>
-<p>在vim里，使用如下命令进行插件的安装和使用</p>
-<h4 id="31-状态检查">3.1 状态检查</h4>
-<pre><code class="language-shell">:PlugStatus
-</code></pre>
-<h4 id="32-安装插件">3.2 安装插件</h4>
-<pre><code class="language-shell">:PlugInstall #安装配置文件中指定的所有插件
-:PlugInstall [name][#thread] #指定安装的插件和使用线程
-</code></pre>
-<h4 id="33-更新插件">3.3 更新插件</h4>
-<pre><code class="language-shell">:PlugUpdate
-</code></pre>
-<h4 id="34-卸载插件">3.4 卸载插件</h4>
-<p>卸载在vimrc中删除或者注释掉的插件</p>
-<pre><code class="language-shell">:PlugClean
-</code></pre>
-<h4 id="35-升级vim-plus本身">3.5 升级vim plus本身</h4>
-<pre><code class="language-shell">:PlugUpgrade
 </code></pre>
 ]]></content>
     </entry>

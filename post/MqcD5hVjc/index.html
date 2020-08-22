@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>开发板 | kids&#39;s Blogger</title>
+<title>【8-19】目前主流无人自主飞行上位机套件 | kids&#39;s Blogger</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -12,13 +12,20 @@
 <link rel="stylesheet" href="https://kids0cn.github.io/styles/main.css">
 
 
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
 
 <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
 
 
-    <meta name="description" content="精耕细作">
+    <meta name="description" content="无人机与无人车不同，需要在三维空间中保持稳态。无人车在没有持续不断的控制信号传入时，会在地面保持静止，即使在控制过程中突然中断信号，无人车也不会出现大的损害。而无人机平台，本身克服地心引力，就需要飞控控制马达一一定的速度旋转。而这种稳态仅仅..." />
+    <meta name="keywords" content="" />
   </head>
   <body>
     <div id="app" class="main">
@@ -88,63 +95,35 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: 开发板</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://kids0cn.github.io/post/2qwuZe9Au/">
-                  <h2 class="post-title">【8-14】树莓派3B+ Ubuntu Mate 18.04使用Intel NCS2做人脸识别</h2>
-                </a>
-                <div class="post-date">
-                  2020-08-14
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://kids0cn.github.io/post/XdBkG1tky/">
-                  <h2 class="post-title">【8-11】树莓派上部署英特尔神经网络计算棒Intel NCS2</h2>
-                </a>
-                <div class="post-date">
-                  2020-08-11
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://kids0cn.github.io/post/qZKoxBQGg/">
-                  <h2 class="post-title">【20-8-7】树莓派上部署英特尔深度相机IntelRealsense T265</h2>
-                </a>
-                <div class="post-date">
-                  2020-08-07
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-                <a class="right" href="https://kids0cn.github.io/post/qZKoxBQGg/">
-                  <div class="feature-container" style="background-image: url('https://kids0cn.github.io/post-images/qZKoxBQGg.jpg')">
-                  </div>
-                </a>
-              
-            </article>
-          
+          <div class="post-detail">
+            <h2 class="post-title">【8-19】目前主流无人自主飞行上位机套件</h2>
+            <div class="post-date">2020-08-19</div>
+            
+            <div class="post-content" v-pre>
+              <p>无人机与无人车不同，需要在三维空间中保持稳态。无人车在没有持续不断的控制信号传入时，会在地面保持静止，即使在控制过程中突然中断信号，无人车也不会出现大的损害。而无人机平台，本身克服地心引力，就需要飞控控制马达一一定的速度旋转。而这种稳态仅仅是在Z轴的稳定。在各种</p>
 
-          <div class="pagination-container">
-  
-  
-</div>
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://kids0cn.github.io/post/2eF0kFcC4/">
+                  <h3 class="post-title">
+                    【8-14】virtualenv和virtualenv wrapper的使用
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
 
         </div>
       </div>
@@ -170,6 +149,29 @@ var app = new Vue({
     hljs.initHighlightingOnLoad()
   </script>
 
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '11076abfacddf9b0bd8a',
+        clientSecret: 'cf5e6000930d960e01f7cabe95886fa6101955de',
+        repo: 'kids0cn.github.io',
+        owner: 'kids0cn',
+        admin: ['kids0cn'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
 
 
 
